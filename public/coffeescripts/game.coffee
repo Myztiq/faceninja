@@ -22,14 +22,14 @@ Q.Sprite.extend "Enemy",
       p.vx *= -1
 
     p.type = Q.SPRITE_ENEMY
-    p.collisionMask = 0
 
     @_super p,
       vx: getRandomArbitary(-400,400)
-      vy:-1300
-      scale: getRandomArbitary(.5,.1)
+      vy:getRandomArbitary(-1400, -1000)
+      scale: getRandomArbitary(.5,.2)
       sheet: "enemy"
 
+    p.collisionMask = 0
     @on 'touch'
 
     # Enemies use the Bounce AI to change direction
@@ -76,36 +76,16 @@ Q.scene "level1", (stage) ->
   stage.insert new Q.Enemy
     x: getRandomArbitary(0,800)
     y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
+
+  setInterval ->
+    stage.insert new Q.Enemy
+      x: getRandomArbitary(0,800)
+      y: 1000
+    stage.insert new Q.Enemy
+      x: getRandomArbitary(0,800)
+      y: 1000
+
+  , 1000
 
 
 # ## Asset Loading and Game Launch

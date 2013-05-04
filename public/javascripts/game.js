@@ -16,13 +16,13 @@
       p.vx = getRandomArbitary(0, 400);
       if (p.x > 400) p.vx *= -1;
       p.type = Q.SPRITE_ENEMY;
-      p.collisionMask = 0;
       this._super(p, {
         vx: getRandomArbitary(-400, 400),
-        vy: -1300,
-        scale: getRandomArbitary(.5, .1),
+        vy: getRandomArbitary(-1400, -1000),
+        scale: getRandomArbitary(.5, .2),
         sheet: "enemy"
       });
+      p.collisionMask = 0;
       this.on('touch');
       return this.add("2d, tween");
     },
@@ -62,46 +62,16 @@
       x: getRandomArbitary(0, 800),
       y: 1000
     }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    return stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
+    return setInterval(function() {
+      stage.insert(new Q.Enemy({
+        x: getRandomArbitary(0, 800),
+        y: 1000
+      }));
+      return stage.insert(new Q.Enemy({
+        x: getRandomArbitary(0, 800),
+        y: 1000
+      }));
+    }, 1000);
   });
 
   Q.load("background-wall.png, enemy.png", function() {
