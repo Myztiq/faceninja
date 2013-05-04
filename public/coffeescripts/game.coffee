@@ -2,7 +2,7 @@
 # the Sprites, Scenes, Input and 2D module. The 2D module
 # includes the `TileLayer` class as well as the `2d` componet.
 
-# Maximize this game to whatever the size of the browser is
+width = 400
 
 getRandomArbitary = (min, max)->
   Math.random() * (max - min) + min;
@@ -11,26 +11,33 @@ getRandomArbitary = (min, max)->
 
 # And turn on default input controls and touch input (for UI)
 Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
-Q.setup(maximize: true).controls().touch(Q.SPRITE_ALL)
+Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
 
 # ## Enemy Sprite
 # Create the Enemy class to add in some baddies
 Q.Sprite.extend "Enemy",
   init: (p) ->
     p.vx = getRandomArbitary(0,400)
-    if p.x > 400
+
+    offset = Q.el.width
+    if p.x > offset / 2
       p.vx *= -1
 
     p.type = Q.SPRITE_ENEMY
 
+
+    height = Q.el.height
+
+
     @_super p,
-      vx: getRandomArbitary(-400,400)
-      vy:getRandomArbitary(-1400, -1000)
-      scale: getRandomArbitary(.5,.2)
+      vy:getRandomArbitary(-height, -height - height / 2)
+      scale: getRandomArbitary(.3,.01)
       sheet: "enemy"
+      angle: getRandomArbitary(-20,20)
 
     p.collisionMask = 0
     @on 'touch'
+    @on 'step'
 
     # Enemies use the Bounce AI to change direction
     # whenver they run into something.
@@ -52,7 +59,13 @@ Q.Sprite.extend "Enemy",
         @destroy()
       , fadeOutTime * 1000
 
+  step: ()->
+    if !@first
+      @first = true
+      @animate({scale: @p.scale+.3, angle: 0}, 2)
 
+    if @p.x > 2000
+      @destroy()
 
 
 # ## Level1 scene
@@ -67,23 +80,16 @@ Q.scene "level1", (stage) ->
     speedY: 0.5
   )
 
-  # Create the player and add them to the stage
+  offset = Q.el.width
+  min = offset / 2 - (width / 2)
+  max = offset / 2 + (width / 2)
 
-  console.log stage
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-  stage.insert new Q.Enemy
-    x: getRandomArbitary(0,800)
-    y: 1000
-
+  height = Q.el.height
   setInterval ->
-    stage.insert new Q.Enemy
-      x: getRandomArbitary(0,800)
-      y: 1000
-    stage.insert new Q.Enemy
-      x: getRandomArbitary(0,800)
-      y: 1000
+    for i in [0..getRandomArbitary(1,4)]
+      stage.insert new Q.Enemy
+        x: getRandomArbitary(min,max)
+        y: height+20
 
   , 1000
 
