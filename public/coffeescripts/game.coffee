@@ -7,8 +7,6 @@ width = 400
 getRandomArbitary = (min, max)->
   Math.random() * (max - min) + min;
 
-
-
 # And turn on default input controls and touch input (for UI)
 Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
 Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
@@ -39,9 +37,6 @@ Q.Sprite.extend "Enemy",
     @on 'touch'
     @on 'step'
 
-    # Enemies use the Bounce AI to change direction
-    # whenver they run into something.
-
     @add "2d, tween"
 
   touch: (data)->
@@ -64,9 +59,8 @@ Q.Sprite.extend "Enemy",
       @first = true
       @animate({scale: @p.scale+.3, angle: 0}, 2)
 
-    if @p.x > 2000
+    if @p.y > Q.el.height + 200
       @destroy()
-
 
 # ## Level1 scene
 # Create a new scene called level 1
@@ -79,19 +73,21 @@ Q.scene "level1", (stage) ->
     speedX: 0.5
     speedY: 0.5
   )
+  timer = 0
+  stage.on 'step', (dt)->
+    timer += dt
+    if timer > 1.5
+      timer = 0
+      offset = Q.el.width
+      min = offset / 2 - (width / 2)
+      max = offset / 2 + (width / 2)
 
-  offset = Q.el.width
-  min = offset / 2 - (width / 2)
-  max = offset / 2 + (width / 2)
+      height = Q.el.height
+      for i in [0..getRandomArbitary(1,4)]
+        Q.stage().insert new Q.Enemy
+          x: getRandomArbitary(min,max)
+          y: height+20
 
-  height = Q.el.height
-  setInterval ->
-    for i in [0..getRandomArbitary(1,4)]
-      stage.insert new Q.Enemy
-        x: getRandomArbitary(min,max)
-        y: height+20
-
-  , 1000
 
 
 # ## Asset Loading and Game Launch
@@ -125,7 +121,7 @@ Q.load "background-wall.png, enemy.png", ->
     stageY = Q.canvasToStageY(y, stage)
 
     # Find the first object at that position on the stage
-    obj = stage.locate(stageX, stageY)
+    obj = stage.locate(stageX, stageY, Q.SPRITE_ENEMY)
 
     if obj?.touch?
       # Set a `hit` property so the step method for the

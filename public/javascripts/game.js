@@ -59,32 +59,37 @@
           angle: 0
         }, 2);
       }
-      if (this.p.x > 2000) return this.destroy();
+      if (this.p.y > Q.el.height + 200) return this.destroy();
     }
   });
 
   Q.scene("level1", function(stage) {
-    var height, max, min, offset;
+    var timer;
     stage.insert(new Q.Repeater({
       asset: "background-wall.png",
       speedX: 0.5,
       speedY: 0.5
     }));
-    offset = Q.el.width;
-    min = offset / 2 - (width / 2);
-    max = offset / 2 + (width / 2);
-    height = Q.el.height;
-    return setInterval(function() {
-      var i, _ref, _results;
-      _results = [];
-      for (i = 0, _ref = getRandomArbitary(1, 4); 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
-        _results.push(stage.insert(new Q.Enemy({
-          x: getRandomArbitary(min, max),
-          y: height + 20
-        })));
+    timer = 0;
+    return stage.on('step', function(dt) {
+      var height, i, max, min, offset, _ref, _results;
+      timer += dt;
+      if (timer > 1.5) {
+        timer = 0;
+        offset = Q.el.width;
+        min = offset / 2 - (width / 2);
+        max = offset / 2 + (width / 2);
+        height = Q.el.height;
+        _results = [];
+        for (i = 0, _ref = getRandomArbitary(1, 4); 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
+          _results.push(Q.stage().insert(new Q.Enemy({
+            x: getRandomArbitary(min, max),
+            y: height + 20
+          })));
+        }
+        return _results;
       }
-      return _results;
-    }, 1000);
+    });
   });
 
   Q.load("background-wall.png, enemy.png", function() {
@@ -105,7 +110,7 @@
       stage = Q.stage();
       stageX = Q.canvasToStageX(x, stage);
       stageY = Q.canvasToStageY(y, stage);
-      obj = stage.locate(stageX, stageY);
+      obj = stage.locate(stageX, stageY, Q.SPRITE_ENEMY);
       if ((obj != null ? obj.touch : void 0) != null) {
         obj.touch({
           location: {
