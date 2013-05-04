@@ -2,65 +2,14 @@
 # the Sprites, Scenes, Input and 2D module. The 2D module
 # includes the `TileLayer` class as well as the `2d` componet.
 
+Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
+
+
 width = 400
+mousePositions = []
 
 getRandomArbitary = (min, max)->
   Math.random() * (max - min) + min;
-
-# And turn on default input controls and touch input (for UI)
-Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
-Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
-
-# ## Enemy Sprite
-# Create the Enemy class to add in some baddies
-Q.Sprite.extend "Enemy",
-  init: (p) ->
-    p.vx = getRandomArbitary(0,400)
-
-    offset = Q.el.width
-    if p.x > offset / 2
-      p.vx *= -1
-
-    p.type = Q.SPRITE_ENEMY
-
-
-    height = Q.el.height
-
-
-    @_super p,
-      vy:getRandomArbitary(-height, -height - height / 2)
-      scale: getRandomArbitary(.3,.01)
-      sheet: "enemy"
-      angle: getRandomArbitary(-20,20)
-
-    p.collisionMask = 0
-    @on 'touch'
-    @on 'step'
-
-    @add "2d, tween"
-
-  touch: (data)->
-    if !@dead
-      @dead = true
-      angleX = data.oldLocation.x - data.location.x
-      angleY = data.oldLocation.y - data.location.y
-
-      @p.vy -= angleY*50
-      @p.vx -= angleX*50
-
-      fadeOutTime = .5
-      @animate({angle: 1720, scale: .001}, fadeOutTime, Q.Easing.Linear)
-      window.setTimeout =>
-        @destroy()
-      , fadeOutTime * 1000
-
-  step: ()->
-    if !@first
-      @first = true
-      @animate({scale: @p.scale+.3, angle: 0}, 2)
-
-    if @p.y > Q.el.height + 200
-      @destroy()
 
 # ## Level1 scene
 # Create a new scene called level 1
@@ -75,6 +24,42 @@ Q.scene "level1", (stage) ->
   )
   timer = 0
   stage.on 'step', (dt)->
+
+    old = null
+    for position in mousePositions
+      if old? and position?
+        # Fill the space between the two positions.
+        distance =
+          x: old.x - position.x
+          y: old.y - position.y
+        distance.total = Math.round(Math.sqrt(Math.pow(old.x - position.x,2) + Math.pow(old.y - position.y,2)))
+
+        for step in [0..distance.total] by 5
+          offset =
+            x: distance.x * step / distance.total
+            y: distance.y * step / distance.total
+
+          stage.insert new Q.Sword
+            x: position.x + offset.x
+            y: position.y + offset.y
+
+      else if position?
+        stage.insert new Q.Sword
+          x: position.x
+          y: position.y
+
+      old = position
+
+#    swords = Q('Sword')
+#    if swords.length > 100
+#      for i in [100..swords.length+1]
+        sword = swords.at(i)
+#        if sword
+#          sword.kill()
+
+
+    mousePositions = [mousePositions[mousePositions.length-1]]
+
     timer += dt
     if timer > 1.5
       timer = 0
@@ -84,7 +69,7 @@ Q.scene "level1", (stage) ->
 
       height = Q.el.height
       for i in [0..getRandomArbitary(1,4)]
-        Q.stage().insert new Q.Enemy
+        stage.insert new Q.Enemy
           x: getRandomArbitary(min,max)
           y: height+20
 
@@ -100,38 +85,13 @@ Q.load "background-wall.png, enemy.png", ->
     tilew: 300
     tileh: 240
 
+  # And turn on default input   controls and touch input (for UI)
+  Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
+
   # Finally, call stageScene to run the game
   Q.stageScene "level1"
 
-  # Touch events do most of the work for us, but the
-  # touch system doesn't handle mousemouse events, so lets add
-  # in an event listener and use `Stage.locate` to highlight
-  # sprites on desktop.
-  oldLocation =
-    x: 0
-    y: 0
   Q.el.addEventListener "mousemove", (e) ->
-    x = e.offsetX or e.layerX
-    y = e.offsetY or e.layerY
-    stage = Q.stage()
-
-    # Use the helper methods from the Input Module on Q to
-    # translate from canvas to stage
-    stageX = Q.canvasToStageX(x, stage)
-    stageY = Q.canvasToStageY(y, stage)
-
-    # Find the first object at that position on the stage
-    obj = stage.locate(stageX, stageY, Q.SPRITE_ENEMY)
-
-    if obj?.touch?
-      # Set a `hit` property so the step method for the
-      # sprite can handle scale appropriately
-      obj.touch
-        location:
-          x: x
-          y: y
-        oldLocation: oldLocation
-
-    oldLocation =
-      x: x
-      y: y
+    mousePositions.push
+      x: e.offsetX or e.layerX
+      y: e.offsetY or e.layerY
