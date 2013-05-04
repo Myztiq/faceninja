@@ -15,6 +15,8 @@
     init: function(p) {
       p.vx = getRandomArbitary(0, 400);
       if (p.x > 400) p.vx *= -1;
+      p.type = Q.SPRITE_ENEMY;
+      p.collisionMask = 0;
       this._super(p, {
         vx: getRandomArbitary(-400, 400),
         vy: -1300,
@@ -52,6 +54,18 @@
       speedY: 0.5
     }));
     console.log(stage);
+    stage.insert(new Q.Enemy({
+      x: getRandomArbitary(0, 800),
+      y: 1000
+    }));
+    stage.insert(new Q.Enemy({
+      x: getRandomArbitary(0, 800),
+      y: 1000
+    }));
+    stage.insert(new Q.Enemy({
+      x: getRandomArbitary(0, 800),
+      y: 1000
+    }));
     stage.insert(new Q.Enemy({
       x: getRandomArbitary(0, 800),
       y: 1000

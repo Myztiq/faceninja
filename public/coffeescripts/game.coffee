@@ -21,6 +21,9 @@ Q.Sprite.extend "Enemy",
     if p.x > 400
       p.vx *= -1
 
+    p.type = Q.SPRITE_ENEMY
+    p.collisionMask = 0
+
     @_super p,
       vx: getRandomArbitary(-400,400)
       vy:-1300
@@ -67,6 +70,15 @@ Q.scene "level1", (stage) ->
   # Create the player and add them to the stage
 
   console.log stage
+  stage.insert new Q.Enemy
+    x: getRandomArbitary(0,800)
+    y: 1000
+  stage.insert new Q.Enemy
+    x: getRandomArbitary(0,800)
+    y: 1000
+  stage.insert new Q.Enemy
+    x: getRandomArbitary(0,800)
+    y: 1000
   stage.insert new Q.Enemy
     x: getRandomArbitary(0,800)
     y: 1000
