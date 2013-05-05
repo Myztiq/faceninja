@@ -1,100 +1,20 @@
 (function() {
-  var Q, getRandomArbitary, mousePositions, width;
-
-  Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI");
-
-  width = 400;
-
-  mousePositions = [];
+  var getRandomArbitary;
 
   getRandomArbitary = function(min, max) {
     return Math.random() * (max - min) + min;
   };
 
-  Q.scene('login', function(stage) {
-    stage.insert(new Q.Repeater({
-      asset: "background-wall.png",
-      speedX: 0.5,
-      speedY: 0.5
-    }));
-    return stage.insert(new Q.UI.Button({
-      label: 'Login',
-      y: 150,
-      x: Q.width / 2,
-      border: 2,
-      fill: 'white'
-    }, function() {
-      Q.clearStages();
-      return Q.stageScene('start');
-    }));
-  });
-
-  Q.scene('start', function(stage) {
-    stage.insert(new Q.Repeater({
-      asset: "background-wall.png",
-      speedX: 0.5,
-      speedY: 0.5
-    }));
-    stage.insert(new Q.UI.Button({
-      label: 'Start Game',
-      y: 150,
-      x: Q.width / 2,
-      border: 2,
-      fill: 'white'
-    }, function() {
-      Q.clearStages();
-      return Q.stageScene('level1');
-    }));
-    return stage.insert(new Q.UI.Button({
-      label: 'Logout',
-      y: 350,
-      x: Q.width / 2,
-      border: 2,
-      fill: 'white'
-    }, function() {
-      Q.clearStages();
-      return Q.stageScene('login');
-    }));
-  });
-
-  Q.scene('pause', function(stage) {
-    var unpause;
-    unpause = function() {
-      Q.clearStage(1);
-      return Q.stage(0).unpause();
-    };
-    Q.input.on("fire", unpause);
-    stage.insert(new Q.UI.Button({
-      label: 'Restart Game',
-      y: 150,
-      x: Q.width / 2,
-      border: 2,
-      fill: 'white'
-    }, function() {
-      Q.clearStages();
-      return Q.stageScene('level1');
-    }));
-    stage.insert(new Q.UI.Button({
-      label: 'Resume Game',
-      y: 250,
-      x: Q.width / 2,
-      border: 2,
-      fill: 'white'
-    }, unpause));
-    return stage.insert(new Q.UI.Button({
-      label: 'Logout',
-      y: 350,
-      x: Q.width / 2,
-      border: 2,
-      fill: 'white'
-    }, function() {
-      Q.clearStages();
-      return Q.stageScene('login');
-    }));
-  });
-
   Q.scene("level1", function(stage) {
-    var timer, vibrating;
+    var mousePositions, timer, vibrating, width;
+    width = 400;
+    mousePositions = [];
+    Q.el.addEventListener("mousemove", function(e) {
+      return mousePositions.push({
+        x: e.offsetX || e.layerX,
+        y: e.offsetY || e.layerY
+      });
+    });
     stage.insert(new Q.Repeater({
       asset: "background-wall.png",
       speedX: 0.5,
@@ -174,24 +94,6 @@
         }
         return _results;
       }
-    });
-  });
-
-  Q.load("background-wall.png, enemy.png, https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c50.50.625.625/s160x160/420279_773038823690_1127613549_n.jpg", function() {
-    Q.include('Particles');
-    Q.sheet("enemy", "enemy.png", {
-      tilew: 300,
-      tileh: 240
-    });
-    Q.setup({
-      maximize: true
-    }).controls().touch(Q.SPRITE_ALL);
-    Q.stageScene("login");
-    return Q.el.addEventListener("mousemove", function(e) {
-      return mousePositions.push({
-        x: e.offsetX || e.layerX,
-        y: e.offsetY || e.layerY
-      });
     });
   });
 

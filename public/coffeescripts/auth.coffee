@@ -16,14 +16,14 @@ window.fbAsyncInit = ->
   # Additional initialization code such as adding Event Listeners goes here
   # Login the user.
   FB.login (response) ->
-	if response.authResponse
-	    
-	  # User is now logged in via Facebook.
-	  console.log "My access token is: " + response.authResponse.accessToken
-	  console.log "My access token expiry is: " + response.authResponse.expiresIn
-	  
-	# Here, you want to call "Kinvey.User.loginWithFacebook" (see below).
-	else
+    if response.authResponse
+
+      # User is now logged in via Facebook.
+      console.log "My access token is: " + response.authResponse.accessToken
+      console.log "My access token expiry is: " + response.authResponse.expiresIn
+
+    # Here, you want to call "Kinvey.User.loginWithFacebook" (see below).
+    else
 
 
 	# User cancelled login or did not fully authorize.
