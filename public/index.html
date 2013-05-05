@@ -3,11 +3,43 @@
 <head>
   <script src="https://da189i1jfloii.cloudfront.net/js/kinvey-js-0.9.14.min.js"></script>
   <script src='/javascripts/third-party/quintus-all.js'></script>
-  <script src='/javascripts/auth.js'></script>
   <script src='/javascripts/game.js'></script>
   <script src='/javascripts/enemy.js'></script>
   <script src='/javascripts/sword.js'></script>
 </head>
 <body>
+	<div id="fb-root"></div>
+	<script>
+	  window.fbAsyncInit = function() {
+	    // init the FB JS SDK
+	    FB.init({
+	      appId      : '168848406613915',                        // App ID from the app dashboard
+	      channelUrl : '/channel.html', // Channel file for x-domain comms
+	      status     : true,                                 // Check Facebook Login status
+	      xfbml      : true                                  // Look for social plugins on the page
+	    });
+
+	    // Additional initialization code such as adding Event Listeners goes here
+	    FB.login(function(response) {
+	      if (response.authResponse) {
+			console.log('Welcome!  Fetching your information.... ');
+			FB.api('/me', function(response) {
+			  console.log('Good to see you, ' + response.name + '.');
+			});
+			} else {
+			  console.log('User cancelled login or did not fully authorize.');
+			}
+		});
+	  };
+
+	  // Load the SDK asynchronously
+	  (function(d, s, id){
+	     var js, fjs = d.getElementsByTagName(s)[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement(s); js.id = id;
+	     js.src = "//connect.facebook.net/en_US/all.js";
+	     fjs.parentNode.insertBefore(js, fjs);
+	   }(document, 'script', 'facebook-jssdk'));
+	</script>
 </body>
 </HTML>
