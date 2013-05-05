@@ -4730,6 +4730,11 @@ Quintus["2D"] = function(Q) {
           p = entity.p,
           magnitude = 0;
 
+
+      if(!(p.collisionMask & col.obj.p.type)){
+        return
+      }
+
       col.impact = 0;
       var impactX = Math.abs(p.vx);
       var impactY = Math.abs(p.vy);

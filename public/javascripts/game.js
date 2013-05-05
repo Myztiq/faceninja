@@ -12,15 +12,38 @@
   };
 
   Q.scene("level1", function(stage) {
-    var timer;
+    var timer, vibrating;
     stage.insert(new Q.Repeater({
       asset: "background-wall.png",
       speedX: 0.5,
       speedY: 0.5
     }));
     timer = 0;
+    vibrating = false;
+    stage.add("viewport, tween");
+    stage.on('vibrate', function() {
+      if (!vibrating) {
+        vibrating = true;
+        return this.animate({
+          x: Math.random() * 20,
+          y: Math.random() * 20
+        }, .1, Q.Easing.Quadratic.In, {
+          callback: function() {
+            return this.animate({
+              x: 0,
+              y: 0,
+              scale: 1
+            }, .05, Q.Easing.Quadratic.In, {
+              callback: function() {
+                return vibrating = false;
+              }
+            });
+          }
+        });
+      }
+    });
     return stage.on('step', function(dt) {
-      var distance, height, i, max, min, offset, old, position, step, sword, swords, _i, _len, _ref, _ref2, _ref3, _results;
+      var distance, height, i, max, min, offset, old, position, step, _i, _len, _ref, _ref2, _results;
       old = null;
       for (_i = 0, _len = mousePositions.length; _i < _len; _i++) {
         position = mousePositions[_i];
@@ -30,7 +53,7 @@
             y: old.y - position.y
           };
           distance.total = Math.round(Math.sqrt(Math.pow(old.x - position.x, 2) + Math.pow(old.y - position.y, 2)));
-          for (step = 0, _ref = distance.total; step <= _ref; step += 5) {
+          for (step = 0, _ref = distance.total; step <= _ref; step += 4) {
             offset = {
               x: distance.x * step / distance.total,
               y: distance.y * step / distance.total
@@ -48,13 +71,6 @@
         }
         old = position;
       }
-      swords = Q('Sword');
-      if (swords.length > 100) {
-        for (i = 100, _ref2 = swords.length + 1; 100 <= _ref2 ? i <= _ref2 : i >= _ref2; 100 <= _ref2 ? i++ : i--) {
-          sword = swords.at(i);
-          if (sword) sword.kill();
-        }
-      }
       mousePositions = [mousePositions[mousePositions.length - 1]];
       timer += dt;
       if (timer > 1.5) {
@@ -64,7 +80,7 @@
         max = offset / 2 + (width / 2);
         height = Q.el.height;
         _results = [];
-        for (i = 0, _ref3 = getRandomArbitary(1, 4); 0 <= _ref3 ? i <= _ref3 : i >= _ref3; 0 <= _ref3 ? i++ : i--) {
+        for (i = 0, _ref2 = getRandomArbitary(1, 4); 0 <= _ref2 ? i <= _ref2 : i >= _ref2; 0 <= _ref2 ? i++ : i--) {
           _results.push(stage.insert(new Q.Enemy({
             x: getRandomArbitary(min, max),
             y: height + 20
@@ -75,7 +91,8 @@
     });
   });
 
-  Q.load("background-wall.png, enemy.png", function() {
+  Q.load("background-wall.png, enemy.png, https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c50.50.625.625/s160x160/420279_773038823690_1127613549_n.jpg", function() {
+    Q.include('Particles');
     Q.sheet("enemy", "enemy.png", {
       tilew: 300,
       tileh: 240

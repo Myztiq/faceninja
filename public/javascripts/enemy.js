@@ -12,27 +12,29 @@
       offset = Q.el.width;
       if (p.x > offset / 2) p.vx *= -1;
       height = Q.el.height;
-      this._super(p, {
+      Q._defaults(p, {
         vy: getRandomArbitary(-height, -height - height / 2),
-        scale: getRandomArbitary(.3, .01),
-        sheet: "enemy",
+        asset: "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c50.50.625.625/s160x160/420279_773038823690_1127613549_n.jpg",
         angle: getRandomArbitary(-20, 20),
-        type: Q.SPRITE_ENEMY
+        type: Q.SPRITE_ENEMY,
+        scale: getRandomArbitary(.5, .1)
       });
-      p.collisionMask = 0;
-      this.on('step');
-      return this.add("2d, tween");
+      this._super(p);
+      this.add("2d, tween");
+      return this.p.collisionMask = Q.SPRITE_NONE;
     },
     slice: function(data) {
       var angleX, angleY, fadeOutTime;
       var _this = this;
       if (!this.dead) {
         this.dead = true;
-        angleX = 0;
-        angleY = 0;
-        this.p.vy = angleY * -50;
-        this.p.vx = angleX * -50;
+        angleX = data.x;
+        angleY = data.y;
+        this.p.vy += angleY * 50;
+        this.p.vx += angleX * 50;
         fadeOutTime = .5;
+        Q.stage().trigger('vibrate');
+        Q.explode(this);
         return this.animate({
           angle: 1720,
           scale: .001
@@ -42,6 +44,15 @@
           }
         });
       }
+    },
+    draw: function(ctx) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(0, 0, this.p.w / 2, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(Q.asset(this.p.asset), -this.p.cx, -this.p.cy);
+      return ctx.restore();
     },
     step: function() {
       if (!this.first) {
