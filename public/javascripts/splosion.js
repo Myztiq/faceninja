@@ -7,29 +7,44 @@
 
   Quintus.Particles = function(Q) {
     return Q.explode = function(source) {
-      var height, width;
+      var height, i, stage, width, _results;
       width = source.p.w * source.p.scale;
       height = source.p.h * source.p.scale;
-      return console.log(width, height);
+      stage = Q.stage();
+      source.destroy();
+      _results = [];
+      for (i = 0; i <= 100; i++) {
+        _results.push(stage.insert(new Q.Splosion({
+          x: source.p.x,
+          y: source.p.y,
+          vx: getRandomArbitary(0, 3) * source.p.vx,
+          vy: getRandomArbitary(0, 3) * source.p.vy
+        })));
+      }
+      return _results;
     };
   };
 
   Q.Sprite.extend("Splosion", {
     init: function(p) {
       this._super(p, {
-        type: Q.SPRITE_DEFAULT,
+        type: Q.SPRITE_NONE,
         w: 1,
         h: 1,
         o: 1
       });
-      this.add("tween");
+      this.add("tween, 2d");
       this.on('step');
       return this.p.collisionMask = Q.SPRITE_NONE;
     },
     draw: function(ctx) {
-      ctx.fillStyle = "rgba(220,220,220," + this.p.o + ")";
+      var b, g, r;
+      r = Math.round(getRandomArbitary(0, 255));
+      g = Math.round(getRandomArbitary(0, 255));
+      b = Math.round(getRandomArbitary(0, 255));
+      ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + this.p.o + ")";
       ctx.beginPath();
-      ctx.arc(0, 0, this.p.w / 2, 0, Math.PI * 2, true);
+      ctx.arc(0, 0, 2, 0, Math.PI * 2, true);
       ctx.closePath();
       return ctx.fill();
     },
@@ -38,9 +53,9 @@
       if (!this.first) {
         this.first = true;
         return this.animate({
-          scale: this.p.scale + .3,
-          angle: 0
-        }, 2, {
+          angle: 300,
+          o: 0
+        }, .6, {
           callback: function() {
             return _this.destroy();
           }
