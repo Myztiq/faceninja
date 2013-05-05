@@ -12,16 +12,16 @@
       offset = Q.el.width;
       if (p.x > offset / 2) p.vx *= -1;
       height = Q.el.height;
-      this._super(p, {
+      Q._defaults(p, {
         vy: getRandomArbitary(-height, -height - height / 2),
         scale: getRandomArbitary(.3, .01),
         sheet: "enemy",
         angle: getRandomArbitary(-20, 20),
         type: Q.SPRITE_ENEMY
       });
-      p.collisionMask = 0;
-      this.on('step');
-      return this.add("2d, tween");
+      this._super(p);
+      this.add("2d, tween");
+      return this.p.collisionMask = Q.SPRITE_NONE;
     },
     slice: function(data) {
       var angleX, angleY, fadeOutTime;

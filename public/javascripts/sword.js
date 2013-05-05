@@ -10,18 +10,22 @@
       this.inactive = false;
       this.add("tween");
       this.on('step');
-      return this.on('hit');
+      this.on('hit');
+      return this.p.collisionMask = Q.SPRITE_NONE;
     },
     step: function(dx) {
       var _this = this;
-      if (!this.inactive) this.stage.collide(this, Q.SPRITE_ENEMY);
+      if (!this.inactive) {
+        this.stage.collide(this, Q.SPRITE_ENEMY);
+        this.inactive = true;
+      }
       if (!this.started) {
         this.started = true;
         return this.animate({
           w: 0,
           h: 0,
           o: 0
-        }, .05, Q.Easing.Quadratic.In, {
+        }, .5, Q.Easing.Quadratic.In, {
           callback: function() {
             return _this.destroy();
           }
@@ -37,8 +41,5 @@
     },
     hit: function(options) {
       if (!this.inactive) return options.obj.slice();
-    },
-    kill: function() {
-      return this.inactive = true;
     }
   });

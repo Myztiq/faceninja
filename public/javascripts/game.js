@@ -20,7 +20,7 @@
     }));
     timer = 0;
     return stage.on('step', function(dt) {
-      var distance, height, i, max, min, offset, old, position, step, sword, swords, _i, _len, _ref, _ref2, _ref3, _results;
+      var distance, height, i, max, min, offset, old, position, step, _i, _len, _ref, _ref2, _results;
       old = null;
       for (_i = 0, _len = mousePositions.length; _i < _len; _i++) {
         position = mousePositions[_i];
@@ -48,13 +48,6 @@
         }
         old = position;
       }
-      swords = Q('Sword');
-      if (swords.length > 100) {
-        for (i = 100, _ref2 = swords.length + 1; 100 <= _ref2 ? i <= _ref2 : i >= _ref2; 100 <= _ref2 ? i++ : i--) {
-          sword = swords.at(i);
-          if (sword) sword.kill();
-        }
-      }
       mousePositions = [mousePositions[mousePositions.length - 1]];
       timer += dt;
       if (timer > 1.5) {
@@ -64,7 +57,7 @@
         max = offset / 2 + (width / 2);
         height = Q.el.height;
         _results = [];
-        for (i = 0, _ref3 = getRandomArbitary(1, 4); 0 <= _ref3 ? i <= _ref3 : i >= _ref3; 0 <= _ref3 ? i++ : i--) {
+        for (i = 0, _ref2 = getRandomArbitary(1, 4); 0 <= _ref2 ? i <= _ref2 : i >= _ref2; 0 <= _ref2 ? i++ : i--) {
           _results.push(stage.insert(new Q.Enemy({
             x: getRandomArbitary(min, max),
             y: height + 20

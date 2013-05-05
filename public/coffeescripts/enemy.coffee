@@ -13,18 +13,16 @@ Q.Sprite.extend "Enemy",
 
     height = Q.el.height
 
-    @_super p,
+    Q._defaults p,
       vy:getRandomArbitary(-height, -height - height / 2)
       scale: getRandomArbitary(.3,.01)
       sheet: "enemy"
       angle: getRandomArbitary(-20,20)
       type: Q.SPRITE_ENEMY
 
-    p.collisionMask = 0
-
-    @on 'step'
-
+    @_super p
     @add "2d, tween"
+    @p.collisionMask = Q.SPRITE_NONE
 
   slice: (data)->
     if !@dead

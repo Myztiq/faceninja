@@ -6,19 +6,20 @@ Q.Sprite.extend "Sword",
       w: 10
       h: 10
       o: 1
-
     @inactive = false
     @add "tween"
     @on 'step'
     @on 'hit'
+    @p.collisionMask = Q.SPRITE_NONE
 
   step: (dx)->
     if !@inactive
       @stage.collide @, Q.SPRITE_ENEMY
+      @inactive = true
 
     if !@started
       @started=true
-      @animate {w: 0,h: 0, o: 0}, .05, Q.Easing.Quadratic.In,
+      @animate {w: 0,h: 0, o: 0}, .5, Q.Easing.Quadratic.In,
         callback: =>
           @destroy()
 
@@ -32,6 +33,3 @@ Q.Sprite.extend "Sword",
   hit: (options)->
     if !@inactive
       options.obj.slice()
-
-  kill: ()->
-    @inactive = true

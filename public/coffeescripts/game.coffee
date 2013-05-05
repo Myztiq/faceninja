@@ -50,14 +50,6 @@ Q.scene "level1", (stage) ->
 
       old = position
 
-#    swords = Q('Sword')
-#    if swords.length > 100
-#      for i in [100..swords.length+1]
-        sword = swords.at(i)
-#        if sword
-#          sword.kill()
-
-
     mousePositions = [mousePositions[mousePositions.length-1]]
 
     timer += dt
