@@ -1,5 +1,5 @@
 node_modules
 .DS_Store
 .idea
-javascripts/levels/*.js
-javascripts/*.js
+public/javascripts/levels/*.js
+public/javascripts/*.js
