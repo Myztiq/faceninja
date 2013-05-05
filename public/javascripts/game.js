@@ -53,7 +53,7 @@
             y: old.y - position.y
           };
           distance.total = Math.round(Math.sqrt(Math.pow(old.x - position.x, 2) + Math.pow(old.y - position.y, 2)));
-          for (step = 0, _ref = distance.total; step <= _ref; step += 5) {
+          for (step = 0, _ref = distance.total; step <= _ref; step += 4) {
             offset = {
               x: distance.x * step / distance.total,
               y: distance.y * step / distance.total
@@ -91,7 +91,8 @@
     });
   });
 
-  Q.load("background-wall.png, enemy.png", function() {
+  Q.load("background-wall.png, enemy.png, https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c50.50.625.625/s160x160/420279_773038823690_1127613549_n.jpg", function() {
+    Q.include('Particles');
     Q.sheet("enemy", "enemy.png", {
       tilew: 300,
       tileh: 240

@@ -15,10 +15,10 @@ Q.Sprite.extend "Enemy",
 
     Q._defaults p,
       vy:getRandomArbitary(-height, -height - height / 2)
-      scale: getRandomArbitary(.3,.01)
-      sheet: "enemy"
+      asset: "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c50.50.625.625/s160x160/420279_773038823690_1127613549_n.jpg"
       angle: getRandomArbitary(-20,20)
       type: Q.SPRITE_ENEMY
+      scale: getRandomArbitary(.5,.1)
 
     @_super p
     @add "2d, tween"
@@ -35,10 +35,22 @@ Q.Sprite.extend "Enemy",
 
       fadeOutTime = .5
       Q.stage().trigger 'vibrate'
-
+      Q.explode(@)
       @animate {angle: 1720, scale: .001}, fadeOutTime, Q.Easing.Linear,
         callback: =>
           @destroy()
+
+  draw: (ctx)->
+    ctx.save()
+    ctx.beginPath()
+
+    ctx.arc(0, 0, @p.w/2, 0, Math.PI*2, true)
+
+    ctx.closePath()
+    ctx.clip()
+    ctx.drawImage(Q.asset(@p.asset),-@p.cx,-@p.cy)
+
+    ctx.restore()
 
   step: ()->
     if !@first

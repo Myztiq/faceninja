@@ -3,8 +3,8 @@
     init: function(p) {
       this._super(p, {
         type: Q.SPRITE_DEFAULT,
-        w: 10,
-        h: 10,
+        w: 8,
+        h: 8,
         o: 1
       });
       this.inactive = false;

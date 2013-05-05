@@ -46,7 +46,7 @@ Q.scene "level1", (stage) ->
           y: old.y - position.y
         distance.total = Math.round(Math.sqrt(Math.pow(old.x - position.x,2) + Math.pow(old.y - position.y,2)))
 
-        for step in [0..distance.total] by 5
+        for step in [0..distance.total] by 4
           offset =
             x: distance.x * step / distance.total
             y: distance.y * step / distance.total
@@ -83,8 +83,8 @@ Q.scene "level1", (stage) ->
 # Q.load can be called at any time to load additional assets
 # assets that are already loaded will be skipped
 # The callback will be triggered when everything is loaded
-Q.load "background-wall.png, enemy.png", ->
-
+Q.load "background-wall.png, enemy.png, https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c50.50.625.625/s160x160/420279_773038823690_1127613549_n.jpg", ->
+  Q.include 'Particles'
   Q.sheet "enemy", "enemy.png",
     tilew: 300
     tileh: 240
