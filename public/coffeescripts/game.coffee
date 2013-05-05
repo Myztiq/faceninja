@@ -4,7 +4,6 @@
 
 Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
 
-
 width = 400
 mousePositions = []
 
@@ -23,6 +22,19 @@ Q.scene "level1", (stage) ->
     speedY: 0.5
   )
   timer = 0
+  vibrating = false
+  stage.add("viewport, tween")
+
+  stage.on 'vibrate', ()->
+    if !vibrating
+      vibrating =  true
+      @animate { x:Math.random()*20, y: Math.random()*20},.1,  Q.Easing.Quadratic.In,
+        callback: ->
+          @animate {x:0, y: 0, scale: 1},.05,  Q.Easing.Quadratic.In,
+            callback: ->
+              vibrating = false
+
+
   stage.on 'step', (dt)->
 
     old = null

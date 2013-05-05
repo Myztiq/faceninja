@@ -40,6 +40,11 @@
       return ctx.fill();
     },
     hit: function(options) {
-      if (!this.inactive) return options.obj.slice();
+      if (!this.inactive) {
+        return options.obj.slice({
+          x: options.normalX * options.distance,
+          y: options.normalY * options.distance
+        });
+      }
     }
   });

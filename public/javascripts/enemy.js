@@ -28,11 +28,12 @@
       var _this = this;
       if (!this.dead) {
         this.dead = true;
-        angleX = 0;
-        angleY = 0;
-        this.p.vy = angleY * -50;
-        this.p.vx = angleX * -50;
+        angleX = data.x;
+        angleY = data.y;
+        this.p.vy += angleY * 50;
+        this.p.vx += angleX * 50;
         fadeOutTime = .5;
+        Q.stage().trigger('vibrate');
         return this.animate({
           angle: 1720,
           scale: .001

@@ -32,4 +32,6 @@ Q.Sprite.extend "Sword",
 
   hit: (options)->
     if !@inactive
-      options.obj.slice()
+      options.obj.slice
+        x: options.normalX * options.distance
+        y: options.normalY * options.distance

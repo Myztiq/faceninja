@@ -27,13 +27,15 @@ Q.Sprite.extend "Enemy",
   slice: (data)->
     if !@dead
       @dead = true
-      angleX = 0 #data.old.x - data.current.x
-      angleY = 0 #data.old.y - data.current.y
+      angleX = data.x
+      angleY = data.y
 
-      @p.vy = angleY*-50
-      @p.vx = angleX*-50
+      @p.vy += angleY*50
+      @p.vx += angleX*50
 
       fadeOutTime = .5
+      Q.stage().trigger 'vibrate'
+
       @animate {angle: 1720, scale: .001}, fadeOutTime, Q.Easing.Linear,
         callback: =>
           @destroy()

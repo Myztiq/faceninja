@@ -12,13 +12,36 @@
   };
 
   Q.scene("level1", function(stage) {
-    var timer;
+    var timer, vibrating;
     stage.insert(new Q.Repeater({
       asset: "background-wall.png",
       speedX: 0.5,
       speedY: 0.5
     }));
     timer = 0;
+    vibrating = false;
+    stage.add("viewport, tween");
+    stage.on('vibrate', function() {
+      if (!vibrating) {
+        vibrating = true;
+        return this.animate({
+          x: Math.random() * 20,
+          y: Math.random() * 20
+        }, .1, Q.Easing.Quadratic.In, {
+          callback: function() {
+            return this.animate({
+              x: 0,
+              y: 0,
+              scale: 1
+            }, .05, Q.Easing.Quadratic.In, {
+              callback: function() {
+                return vibrating = false;
+              }
+            });
+          }
+        });
+      }
+    });
     return stage.on('step', function(dt) {
       var distance, height, i, max, min, offset, old, position, step, _i, _len, _ref, _ref2, _results;
       old = null;
