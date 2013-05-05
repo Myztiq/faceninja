@@ -1,127 +1,94 @@
 (function() {
-  var Q, getRandomArbitary;
+  var Q, getRandomArbitary, mousePositions, width;
+
+  Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI");
+
+  width = 400;
+
+  mousePositions = [];
 
   getRandomArbitary = function(min, max) {
     return Math.random() * (max - min) + min;
   };
 
-  Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI");
-
-  Q.setup({
-    maximize: true
-  }).controls().touch(Q.SPRITE_ALL);
-
-  Q.Sprite.extend("Enemy", {
-    init: function(p) {
-      p.vx = getRandomArbitary(0, 400);
-      if (p.x > 400) p.vx *= -1;
-      this._super(p, {
-        vx: getRandomArbitary(-400, 400),
-        vy: -1300,
-        scale: getRandomArbitary(.5, .1),
-        sheet: "enemy"
-      });
-      this.on('touch');
-      return this.add("2d, tween");
-    },
-    touch: function(data) {
-      var angleX, angleY, fadeOutTime;
-      var _this = this;
-      if (!this.dead) {
-        this.dead = true;
-        angleX = data.oldLocation.x - data.location.x;
-        angleY = data.oldLocation.y - data.location.y;
-        this.p.vy -= angleY * 50;
-        this.p.vx -= angleX * 50;
-        fadeOutTime = .5;
-        this.animate({
-          angle: 1720,
-          scale: .001
-        }, fadeOutTime, Q.Easing.Linear);
-        return window.setTimeout(function() {
-          return _this.destroy();
-        }, fadeOutTime * 1000);
-      }
-    }
-  });
-
   Q.scene("level1", function(stage) {
+    var timer;
     stage.insert(new Q.Repeater({
       asset: "background-wall.png",
       speedX: 0.5,
       speedY: 0.5
     }));
-    console.log(stage);
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
-    return stage.insert(new Q.Enemy({
-      x: getRandomArbitary(0, 800),
-      y: 1000
-    }));
+    timer = 0;
+    return stage.on('step', function(dt) {
+      var distance, height, i, max, min, offset, old, position, step, sword, swords, _i, _len, _ref, _ref2, _ref3, _results;
+      old = null;
+      for (_i = 0, _len = mousePositions.length; _i < _len; _i++) {
+        position = mousePositions[_i];
+        if ((old != null) && (position != null)) {
+          distance = {
+            x: old.x - position.x,
+            y: old.y - position.y
+          };
+          distance.total = Math.round(Math.sqrt(Math.pow(old.x - position.x, 2) + Math.pow(old.y - position.y, 2)));
+          for (step = 0, _ref = distance.total; step <= _ref; step += 5) {
+            offset = {
+              x: distance.x * step / distance.total,
+              y: distance.y * step / distance.total
+            };
+            stage.insert(new Q.Sword({
+              x: position.x + offset.x,
+              y: position.y + offset.y
+            }));
+          }
+        } else if (position != null) {
+          stage.insert(new Q.Sword({
+            x: position.x,
+            y: position.y
+          }));
+        }
+        old = position;
+      }
+      swords = Q('Sword');
+      if (swords.length > 100) {
+        for (i = 100, _ref2 = swords.length + 1; 100 <= _ref2 ? i <= _ref2 : i >= _ref2; 100 <= _ref2 ? i++ : i--) {
+          sword = swords.at(i);
+          if (sword) sword.kill();
+        }
+      }
+      mousePositions = [mousePositions[mousePositions.length - 1]];
+      timer += dt;
+      if (timer > 1.5) {
+        timer = 0;
+        offset = Q.el.width;
+        min = offset / 2 - (width / 2);
+        max = offset / 2 + (width / 2);
+        height = Q.el.height;
+        _results = [];
+        for (i = 0, _ref3 = getRandomArbitary(1, 4); 0 <= _ref3 ? i <= _ref3 : i >= _ref3; 0 <= _ref3 ? i++ : i--) {
+          _results.push(stage.insert(new Q.Enemy({
+            x: getRandomArbitary(min, max),
+            y: height + 20
+          })));
+        }
+        return _results;
+      }
+    });
   });
 
   Q.load("background-wall.png, enemy.png", function() {
-    var oldLocation;
     Q.sheet("enemy", "enemy.png", {
       tilew: 300,
       tileh: 240
     });
+    Q.setup({
+      maximize: true
+    }).controls().touch(Q.SPRITE_ALL);
     Q.stageScene("level1");
-    oldLocation = {
-      x: 0,
-      y: 0
-    };
     return Q.el.addEventListener("mousemove", function(e) {
-      var obj, stage, stageX, stageY, x, y;
-      x = e.offsetX || e.layerX;
-      y = e.offsetY || e.layerY;
-      stage = Q.stage();
-      stageX = Q.canvasToStageX(x, stage);
-      stageY = Q.canvasToStageY(y, stage);
-      obj = stage.locate(stageX, stageY);
-      if ((obj != null ? obj.touch : void 0) != null) {
-        obj.touch({
-          location: {
-            x: x,
-            y: y
-          },
-          oldLocation: oldLocation
-        });
-      }
-      return oldLocation = {
-        x: x,
-        y: y
-      };
+      return mousePositions.push({
+        x: e.offsetX || e.layerX,
+        y: e.offsetY || e.layerY
+      });
     });
   });
 
