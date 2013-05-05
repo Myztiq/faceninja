@@ -10,6 +10,88 @@ mousePositions = []
 getRandomArbitary = (min, max)->
   Math.random() * (max - min) + min;
 
+Q.scene 'login', (stage)->
+  stage.insert new Q.Repeater(
+    asset: "background-wall.png"
+    speedX: 0.5
+    speedY: 0.5
+  )
+
+  stage.insert new Q.UI.Button
+    label: 'Login'
+    y: 150
+    x: Q.width/2
+    border: 2
+    fill: 'white'
+  , ->
+    Q.clearStages()
+    Q.stageScene('start')
+
+Q.scene 'start', (stage)->
+  stage.insert new Q.Repeater(
+    asset: "background-wall.png"
+    speedX: 0.5
+    speedY: 0.5
+  )
+
+  stage.insert new Q.UI.Button
+    label: 'Start Game'
+    y: 150
+    x: Q.width/2
+    border: 2
+    fill: 'white'
+  , ->
+    Q.clearStages()
+    Q.stageScene('level1')
+
+  stage.insert new Q.UI.Button
+    label: 'Logout'
+    y: 350
+    x: Q.width/2
+    border: 2
+    fill: 'white'
+  , ->
+    Q.clearStages()
+    Q.stageScene('login')
+
+
+Q.scene 'pause', (stage)->
+  unpause = ->
+    Q.clearStage(1)
+    Q.stage(0).unpause()
+
+  Q.input.on "fire",unpause
+
+  stage.insert new Q.UI.Button
+    label: 'Restart Game'
+    y: 150
+    x: Q.width/2
+    border: 2
+    fill: 'white'
+  , ->
+    Q.clearStages()
+    Q.stageScene('level1')
+
+  stage.insert new Q.UI.Button
+    label: 'Resume Game'
+    y: 250
+    x: Q.width/2
+    border: 2
+    fill: 'white'
+  , unpause
+
+  stage.insert new Q.UI.Button
+    label: 'Logout'
+    y: 350
+    x: Q.width/2
+    border: 2
+    fill: 'white'
+  , ->
+    Q.clearStages()
+    Q.stageScene('login')
+
+
+
 # ## Level1 scene
 # Create a new scene called level 1
 Q.scene "level1", (stage) ->
@@ -34,8 +116,12 @@ Q.scene "level1", (stage) ->
             callback: ->
               vibrating = false
 
-
   stage.on 'step', (dt)->
+    Q.input.on "fire", ->
+      stage.pause()
+      Q.stageScene('pause', 1)
+      return
+
 
     old = null
     for position in mousePositions
@@ -93,7 +179,7 @@ Q.load "background-wall.png, enemy.png, https://fbcdn-profile-a.akamaihd.net/hpr
   Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
 
   # Finally, call stageScene to run the game
-  Q.stageScene "level1"
+  Q.stageScene "login"
 
   Q.el.addEventListener "mousemove", (e) ->
     mousePositions.push
