@@ -26,11 +26,13 @@ Q.Sprite.extend "Splosion",
     @on 'step'
     @p.collisionMask = Q.SPRITE_NONE
 
-  draw: (ctx)->
     r = Math.round getRandomArbitary(0,255)
     g = Math.round getRandomArbitary(0,255)
     b = Math.round getRandomArbitary(0,255)
-    ctx.fillStyle = "rgba(#{r},#{g},#{b},#{@p.o})";
+    @color = "rgba(#{r},#{g},#{b},#{@p.o})";
+
+  draw: (ctx)->
+    ctx.fillStyle = @color
     ctx.beginPath()
     ctx.arc(0, 0, 2, 0, Math.PI*2, true)
     ctx.closePath()
@@ -39,6 +41,6 @@ Q.Sprite.extend "Splosion",
   step: ()->
     if !@first
       @first = true
-      @animate {angle: 300, o: 0}, .6,
+      @animate {angle: 300, o: 0}, 1,
         callback: =>
           @destroy()

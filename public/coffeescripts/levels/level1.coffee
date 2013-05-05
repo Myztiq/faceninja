@@ -17,8 +17,8 @@ Q.scene "level1", (stage) ->
 
   stage.insert new Q.Repeater(
     asset: "background-wall.png"
-    speedX: 0.5
-    speedY: 0.5
+    speedX: 1.5
+    speedY: 1.5
   )
   timer = 0
   vibrating = false
@@ -27,9 +27,10 @@ Q.scene "level1", (stage) ->
   stage.on 'vibrate', ()->
     if !vibrating
       vibrating =  true
-      @animate { x:Math.random()*20, y: Math.random()*20},.1,  Q.Easing.Quadratic.In,
+      vibration = 30
+      @animate { x:Math.random()*vibration, y: Math.random()*vibration},.07,  Q.Easing.Quadratic.In,
         callback: ->
-          @animate {x:0, y: 0, scale: 1},.05,  Q.Easing.Quadratic.In,
+          @animate {x:0, y: 0, scale: 1},.07,  Q.Easing.Quadratic.In,
             callback: ->
               vibrating = false
 
