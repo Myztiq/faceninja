@@ -7,12 +7,21 @@
   });
 
   window.fbAsyncInit = function() {
-    return FB.init({
+    FB.init({
       appId: "168848406613915",
-      channelUrl: "http://www.friendassassin.com/channel.html",
-      status: true
+      channelUrl: "/channel.html",
+      status: true,
+      xfbml: true
     });
+    return FB.login(function(response) {});
   };
+
+  if (response.authResponse) {
+    console.log("My access token is: " + response.authResponse.accessToken);
+    console.log("My access token expiry is: " + response.authResponse.expiresIn);
+  } else {
+
+  }
 
   (function(d, s, id) {
     var fjs, js;
@@ -25,15 +34,6 @@
     return fjs.parentNode.insertBefore(js, fjs);
   })(document, "script", "facebook-jssdk");
 
-  FB.login(function(response) {
-    if (response.authResponse) {
-      console.log("My access token is: " + response.authResponse.accessToken);
-      return console.log("My access token expiry is: " + response.authResponse.expiresIn);
-    } else {
-
-    }
-  });
-
   user = new Kinvey.User();
 
   user.loginWithFacebook({
@@ -45,7 +45,5 @@
     success: function(user) {},
     error: function(e) {}
   });
-
-  Kinvey.User.loginWithFacebook;
 
 }).call(this);
