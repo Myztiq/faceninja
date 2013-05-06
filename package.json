@@ -1,6 +1,6 @@
 {
   "name": "Heroku_Seed_Project",
-	"author": "Ryan Kahn",
+  "author": "Ryan Kahn",
   "version": "0.0.1",
   "scripts": {
     "start": "node index"
