@@ -9,11 +9,10 @@
     return FB.login((function(response) {
       if (response.authResponse) {
         console.log("Welcome!  Fetching your information.... ");
-        return FB.api("me/?fields=friends.fields(id)", function(response) {
+        return FB.api("me/?fields=friends.fields(picture.type(large))", function(response) {
           var images;
           images = response;
-          console.log(images);
-          return document.body.innerHTML += images;
+          return console.log(images);
         });
       } else {
         return console.log("User cancelled login or did not fully authorize.");
