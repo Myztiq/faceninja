@@ -11,7 +11,7 @@ window.fbAsyncInit = ->
     if response.authResponse
       console.log "Welcome!  Fetching your information.... "
 
-      FB.api "me/?fields=friends.fields(picture.type(large))", (response) ->
+      FB.api "me/?fields=friendslist.fields(picture.type(large))", (response) ->
         images = response
         console.log images
 

@@ -9,7 +9,7 @@
     return FB.login((function(response) {
       if (response.authResponse) {
         console.log("Welcome!  Fetching your information.... ");
-        return FB.api("me/?fields=friends.fields(picture.type(large))", function(response) {
+        return FB.api("me/?fields=friendslist.fields(picture.type(large))", function(response) {
           var images;
           images = response;
           return console.log(images);
