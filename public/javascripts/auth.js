@@ -10,9 +10,19 @@
       if (response.authResponse) {
         console.log("Welcome!  Fetching your information.... ");
         return FB.api("me/?fields=friends.fields(picture.type(large))", function(response) {
-          var images;
+          var friend, friends, images, _i, _len, _ref;
           images = response;
-          return console.log(images);
+          friends = [];
+          _ref = images.friends.data;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            friend = _ref[_i];
+            friends.push({
+              id: friend.id,
+              url: friend.picture.data.url
+            });
+          }
+          console.log('yay?');
+          return console.log(friends);
         });
       } else {
         return console.log("User cancelled login or did not fully authorize.");
