@@ -8,13 +8,19 @@ _friends = null
 Q.scene "loadLevel1", (stage) ->
   window.facebook.getFriends (friends)->
     _friends = null
-    sprites = []
+    resources = []
     for friend in friends
-      sprites.push friend.url
+      resources.push friend.url
+
 
     _friends = friends
     Q.stageScene 'loading'
-    Q.load sprites, ()->
+    resources.push '/audio/effects/explode_1.mp3'
+    resources.push '/audio/effects/explode_2.mp3'
+    resources.push '/audio/effects/explode_3.mp3'
+    resources.push '/audio/effects/explode_4.mp3'
+    resources.push '/audio/effects/explode_5.mp3'
+    Q.load resources, ()->
       Q.clearStages()
       Q.stageScene 'level1'
 
@@ -91,7 +97,7 @@ Q.scene "level1", (stage) ->
 
       height = Q.el.height
       for i in [0..getRandomArbitary(1,4)]
-        friend = _friends[Math.round(getRandomArbitary(0,_friends.length))]
+        friend = _friends[Math.round(getRandomArbitary(0,_friends.length-1))]
         stage.insert new Q.Enemy
           asset: friend.url
           friend: friend.id

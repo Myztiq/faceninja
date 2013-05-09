@@ -34,6 +34,10 @@ Q.Sprite.extend "Enemy",
       @p.vx += angleX*50
 
       fadeOutTime = .5
+
+      rand = Math.round getRandomArbitary 1,5
+      Q.audio.play("/audio/effects/explode_#{rand}.mp3")
+
       Q.stage().trigger 'vibrate'
       Q.explode(@)
       @animate {angle: 1720, scale: .001}, fadeOutTime, Q.Easing.Linear,

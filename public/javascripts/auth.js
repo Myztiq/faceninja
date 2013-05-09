@@ -17,7 +17,6 @@
     _results = [];
     for (_i = 0, _len = holds.length; _i < _len; _i++) {
       hold = holds[_i];
-      console.log(hold);
       _results.push(hold());
     }
     return _results;
@@ -34,10 +33,7 @@
   window.facebook = {
     isLoggedIn: function(cb) {
       return holdForFacebook(function() {
-        console.log('testing');
         return FB.getLoginStatus(function(response) {
-          console.log('response');
-          console.log(response);
           if (response.status === 'connected') {
             return typeof cb === "function" ? cb(true) : void 0;
           } else {
@@ -68,7 +64,6 @@
       return holdForFacebook(function() {
         return FB.api("me/?fields=friends.fields(picture.type(large))", function(response) {
           var friend, friends, images, _i, _len, _ref;
-          console.log(response);
           images = response;
           friends = [];
           _ref = images.friends.data;

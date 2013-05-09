@@ -12,7 +12,6 @@ window.fbAsyncInit = ->
 
   #release holds
   for hold in holds
-    console.log hold
     hold()
 
 holdForFacebook = (method)->
@@ -25,10 +24,7 @@ holdForFacebook = (method)->
 window.facebook =
   isLoggedIn: (cb)->
     holdForFacebook ()->
-      console.log 'testing'
       FB.getLoginStatus (response)->
-        console.log 'response'
-        console.log response
         if response.status == 'connected'
           cb?(true)
         else
@@ -50,7 +46,6 @@ window.facebook =
   getFriends: (cb)->
     holdForFacebook ()->
       FB.api "me/?fields=friends.fields(picture.type(large))", (response) ->
-        console.log response
         images = response
         friends = []
         for friend in images.friends.data
