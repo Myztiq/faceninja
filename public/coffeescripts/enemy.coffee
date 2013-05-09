@@ -34,6 +34,10 @@ Q.Sprite.extend "Enemy",
       @p.vx += angleX*50
 
       fadeOutTime = .5
+
+      rand = Math.round getRandomArbitary 1,5
+      Q.audio.play("/audio/effects/explode_#{rand}.mp3")
+
       Q.stage().trigger 'vibrate'
       Q.explode(@)
       @animate {angle: 1720, scale: .001}, fadeOutTime, Q.Easing.Linear,
@@ -41,7 +45,6 @@ Q.Sprite.extend "Enemy",
           @destroy()
 
   draw: (ctx)->
-    ctx.save()
     ctx.beginPath()
 
     ctx.arc(0, 0, @p.w/2, 0, Math.PI*2, true)
@@ -49,8 +52,6 @@ Q.Sprite.extend "Enemy",
     ctx.closePath()
     ctx.clip()
     ctx.drawImage(Q.asset(@p.asset),-@p.cx,-@p.cy)
-
-    ctx.restore()
 
   step: ()->
     if !@first

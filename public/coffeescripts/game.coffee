@@ -2,7 +2,7 @@
 # the Sprites, Scenes, Input and 2D module. The 2D module
 # includes the `TileLayer` class as well as the `2d` componet.
 
-Q = window.Q = Quintus().include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
+Q = window.Q = Quintus({ audioSupported: [ 'mp3', 'ogg' ] }).include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, Audio").enableSound()
 
 # ## Asset Loading and Game Launch
 # Q.load can be called at any time to load additional assets
@@ -19,4 +19,8 @@ document.addEventListener 'DOMContentLoaded', ->
     Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
 
     # Finally, call stageScene to run the game
-    Q.stageScene "login"
+    window.facebook.isLoggedIn (loggedIn)->
+      if loggedIn
+        Q.stageScene "start"
+      else
+        Q.stageScene "login"

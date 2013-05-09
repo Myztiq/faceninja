@@ -1,4 +1,7 @@
+holds = []
+isFbInit = false
 window.fbAsyncInit = ->
+  isFbInit = true
   
   # init the FB JS SDK
   FB.init
@@ -7,27 +10,49 @@ window.fbAsyncInit = ->
     status: true # Check Facebook Login status
     xfbml: true # Look for social plugins on the page
 
-  FB.login ((response) ->
-    if response.authResponse
-      console.log "Welcome!  Fetching your information.... "
+  #release holds
+  for hold in holds
+    hold()
 
-      FB.api "me/?fields=friendslist.fields(picture.type(large))", (response) ->
+holdForFacebook = (method)->
+  if !isFbInit
+    holds.push method
+  else
+    method?()
+
+
+window.facebook =
+  isLoggedIn: (cb)->
+    holdForFacebook ()->
+      FB.getLoginStatus (response)->
+        if response.status == 'connected'
+          cb?(true)
+        else
+          cb?(false)
+
+  login: (cb)->
+    holdForFacebook ()->
+      FB.login (response)->
+        if response.authResponse
+          cb? true
+        else
+          cb? false
+
+  logout: (cb)->
+    holdForFacebook ()->
+      FB.logout ->
+        cb?()
+
+  getFriends: (cb)->
+    holdForFacebook ()->
+      FB.api "me/?fields=friends.fields(picture.type(large))", (response) ->
         images = response
         friends = []
         for friend in images.friends.data
          friends.push
           id: friend.id
           url: friend.picture.data.url
-        console.log 'yay?'
-        console.log friends
-
-    else
-      console.log "User cancelled login or did not fully authorize."
-  ),
-    scope: "friends_photos"
-
-
-  
+        cb friends
 
 
 # Additional initialization code such as adding Event Listeners goes here
