@@ -19,4 +19,8 @@ document.addEventListener 'DOMContentLoaded', ->
     Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
 
     # Finally, call stageScene to run the game
-    Q.stageScene "login"
+    window.facebook.isLoggedIn (loggedIn)->
+      if loggedIn
+        Q.stageScene "start"
+      else
+        Q.stageScene "login"

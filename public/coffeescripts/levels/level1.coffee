@@ -4,6 +4,20 @@ getRandomArbitary = (min, max)->
 
 
 # Create a new scene called level 1
+_friends = null
+Q.scene "loadLevel1", (stage) ->
+  window.facebook.getFriends (friends)->
+    _friends = null
+    sprites = []
+    for friend in friends
+      sprites.push friend.url
+
+    _friends = friends
+    Q.stageScene 'loading'
+    Q.load sprites, ()->
+      Q.clearStages()
+      Q.stageScene 'level1'
+
 Q.scene "level1", (stage) ->
   width = 400
   mousePositions = []
@@ -77,7 +91,10 @@ Q.scene "level1", (stage) ->
 
       height = Q.el.height
       for i in [0..getRandomArbitary(1,4)]
+        friend = _friends[Math.round(getRandomArbitary(0,_friends.length))]
         stage.insert new Q.Enemy
+          asset: friend.url
+          friend: friend.id
           x: getRandomArbitary(min,max)
           y: height+20
 

@@ -15,7 +15,7 @@ Q.scene 'pause', (stage)->
     fill: 'white'
   , ->
     Q.clearStages()
-    Q.stageScene('level1')
+    Q.stageScene('loadLevel1')
 
   stage.insert new Q.UI.Button
     label: 'Resume Game'
@@ -32,5 +32,6 @@ Q.scene 'pause', (stage)->
     border: 2
     fill: 'white'
   , ->
-    Q.clearStages()
-    Q.stageScene('login')
+    window.facebook.logout ()->
+      Q.clearStages()
+      Q.stageScene('login')

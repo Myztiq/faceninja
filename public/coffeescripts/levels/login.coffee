@@ -12,5 +12,9 @@ Q.scene 'login', (stage)->
     border: 2
     fill: 'white'
   , ->
-    Q.clearStages()
-    Q.stageScene('start')
+    window.facebook.login (loggedIn)->
+      if loggedIn
+        Q.clearStages()
+        Q.stageScene('start')
+      else
+        alert('You must authorize this app in order to use it.')
