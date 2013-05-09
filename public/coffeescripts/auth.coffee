@@ -13,7 +13,13 @@ window.fbAsyncInit = ->
 
       FB.api "me/?fields=friendslist.fields(picture.type(large))", (response) ->
         images = response
-        console.log images
+        friends = []
+        for friend in images.friends.data
+         friends.push
+          id: friend.id
+          url: friend.picture.data.url
+        console.log 'yay?'
+        console.log friends
 
     else
       console.log "User cancelled login or did not fully authorize."
