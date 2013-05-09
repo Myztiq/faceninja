@@ -45,7 +45,6 @@ Q.Sprite.extend "Enemy",
           @destroy()
 
   draw: (ctx)->
-    ctx.save()
     ctx.beginPath()
 
     ctx.arc(0, 0, @p.w/2, 0, Math.PI*2, true)
@@ -53,8 +52,6 @@ Q.Sprite.extend "Enemy",
     ctx.closePath()
     ctx.clip()
     ctx.drawImage(Q.asset(@p.asset),-@p.cx,-@p.cy)
-
-    ctx.restore()
 
   step: ()->
     if !@first
