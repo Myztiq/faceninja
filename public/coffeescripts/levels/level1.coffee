@@ -23,7 +23,10 @@ Q.scene "level1", (stage) ->
   width = 400
   mousePositions = []
 
-  Q.el.addEventListener "mousemove", (e) ->
+  stage.on 'destroyed', (dt)->
+    Q.el.removeEventListener "mousemove", @mousemoveListener
+
+  @mousemoveListener = Q.el.addEventListener "mousemove", (e) ->
     mousePositions.push
       x: e.offsetX or e.layerX
       y: e.offsetY or e.layerY
