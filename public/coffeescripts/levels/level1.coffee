@@ -15,11 +15,6 @@ Q.scene "loadLevel1", (stage) ->
 
     _friends = friends
     Q.stageScene 'loading'
-    resources.push '/audio/effects/explode_1.mp3'
-    resources.push '/audio/effects/explode_2.mp3'
-    resources.push '/audio/effects/explode_3.mp3'
-    resources.push '/audio/effects/explode_4.mp3'
-    resources.push '/audio/effects/explode_5.mp3'
     Q.load resources, ()->
       Q.clearStages()
       Q.stageScene 'level1'

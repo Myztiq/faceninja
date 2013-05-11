@@ -9,7 +9,17 @@ Q = window.Q = Quintus({ audioSupported: [ 'mp3', 'ogg' ] }).include("Sprites, S
 # assets that are already loaded will be skipped
 # The callback will be triggered when everything is loaded
 document.addEventListener 'DOMContentLoaded', ->
-  Q.load "background-wall.png, enemy.png, https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c50.50.625.625/s160x160/420279_773038823690_1127613549_n.jpg", ->
+  loadArray =[
+    "background-wall.png"
+    "enemy.png"
+  ]
+
+  for i in [1..5]
+    loadArray.push '/audio/effects/mellow-explode/explode_'+i+'.mp3'
+#    loadArray.push '/audio/effects/explode/explode_'+i+'.mp3'
+
+
+  Q.load loadArray, ->
     Q.include 'Particles'
     Q.sheet "enemy", "enemy.png",
       tilew: 300

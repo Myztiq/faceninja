@@ -27,22 +27,13 @@ Q.Sprite.extend "Enemy",
   slice: (data)->
     if !@dead
       @dead = true
-#      angleX = data.x
-#      angleY = data.y
-#
-#      @p.vy += angleY*50
-#      @p.vx += angleX*50
 
-      fadeOutTime = .5
-
-#      rand = Math.round getRandomArbitary 1,5
-#      Q.audio.play("/audio/effects/explode_#{rand}.mp3")
+      rand = Math.round getRandomArbitary 1,5
+      Q.audio.play("/audio/effects/mellow-explode/explode_#{rand}.mp3")
+#      Q.audio.play("/audio/effects/explode/explode_#{rand}.mp3")
 
       Q.stage().trigger 'vibrate'
       Q.explode(@)
-      @animate {angle: 1720, scale: .001}, fadeOutTime, Q.Easing.Linear,
-        callback: =>
-          @destroy()
 
   draw: (ctx)->
     ctx.beginPath()

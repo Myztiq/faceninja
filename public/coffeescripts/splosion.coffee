@@ -87,8 +87,6 @@ Q.Sprite.extend "Splosion",
 
     @p.w = @p.pixelData.width
     @p.h = @p.pixelData.height
-#    @p.vx
-#    @p.vy += Math.random() * 100 - 50
 
     @add "tween"
     @on 'step'
