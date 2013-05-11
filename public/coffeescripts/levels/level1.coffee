@@ -20,6 +20,8 @@ Q.scene "loadLevel1", (stage) ->
       Q.stageScene 'level1'
 
 Q.scene "level1", (stage) ->
+  Q.stageScene 'score', 2
+
   width = 400
   mousePositions = []
 

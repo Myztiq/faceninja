@@ -33,6 +33,7 @@ Q.Sprite.extend "Enemy",
 #      Q.audio.play("/audio/effects/explode/explode_#{rand}.mp3")
 
       Q.stage().trigger 'vibrate'
+      window.score.kills++
       Q.explode(@)
 
   draw: (ctx)->
@@ -50,4 +51,5 @@ Q.Sprite.extend "Enemy",
       @animate({scale: @p.scale+.3, angle: 0}, 2)
 
     if @p.y > Q.el.height + 200
+      window.score.lives--
       @destroy()
