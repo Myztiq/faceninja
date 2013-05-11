@@ -45,13 +45,15 @@ window.facebook =
 
   getFriends: (cb)->
     holdForFacebook ()->
-      FB.api "me/?fields=friends.fields(picture.type(large))", (response) ->
+      FB.api "me/?fields=friends.fields(picture.type(large))&redirect=false", (response) ->
         images = response
         friends = []
         for friend in images.friends.data
-         friends.push
-          id: friend.id
-          url: friend.picture.data.url
+          if friend.picture.data.url.indexOf('fbcdn.net') == -1
+            friends.push
+             id: friend.id
+             url: friend.picture.data.url
+
         cb friends
 
 

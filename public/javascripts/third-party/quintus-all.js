@@ -1087,6 +1087,7 @@ var Quintus = function Quintus(opts) {
   // load callback to determine the image has been loaded
   Q.loadAssetImage = function(key,src,callback,errorCallback) {
     var img = new Image();
+    img.crossOrigin = "anonymous";
     img.onload = function() {  callback(key,img); };
     img.onerror = errorCallback;
     img.src = Q.assetUrl(Q.options.imagePath,src);
