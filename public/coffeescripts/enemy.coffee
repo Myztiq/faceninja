@@ -28,8 +28,8 @@ Q.Sprite.extend "Enemy",
     if !@dead
       @dead = true
 
-      rand = Math.round getRandomArbitary 1,5
-      Q.audio.play("/audio/effects/mellow-explode/explode_#{rand}.mp3")
+#      rand = Math.round getRandomArbitary 1,5
+#      Q.audio.play("/audio/effects/mellow-explode/explode_#{rand}.mp3")
 #      Q.audio.play("/audio/effects/explode/explode_#{rand}.mp3")
 
       Q.stage().trigger 'vibrate'

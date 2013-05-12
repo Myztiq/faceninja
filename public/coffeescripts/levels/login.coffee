@@ -12,7 +12,7 @@ Q.scene 'login', (stage)->
     border: 2
     fill: 'white'
   , ->
-    window.facebook.login (loggedIn)->
+    window.auth.loginWithFacebook (loggedIn)->
       if loggedIn
         Q.clearStages()
         Q.stageScene('start')
@@ -26,7 +26,7 @@ Q.scene 'login', (stage)->
 #    border: 2
 #    fill: 'white'
 #  , ->
-#    window.twitter.login (loggedIn)->
+#      window.auth.loginWithTwitter (loggedIn)->
 #      if loggedIn
 #        Q.clearStages()
 #        Q.stageScene('start')

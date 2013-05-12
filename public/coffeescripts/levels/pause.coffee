@@ -32,6 +32,6 @@ Q.scene 'pause', (stage)->
     border: 2
     fill: 'white'
   , ->
-    window.facebook.logout ()->
+    window.auth.logout ()->
       Q.clearStages()
       Q.stageScene('login')

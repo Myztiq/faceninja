@@ -24,15 +24,13 @@ Q.scene 'start', (stage)->
       border: 2
       fill: 'white'
     , ->
-      Kinvey.getCurrentUser().logout
-        success: ->
-          Q.clearStages()
-          Q.stageScene('login')
-        error: (e)->
+      window.auth.logout (e)->
+        if e
           console.log e
           alert('Unable to logout!')
-          Q.clearStages()
-          Q.stageScene "login"
+
+        Q.clearStages()
+        Q.stageScene "login"
 
   else
     Q.stageScene "login"
