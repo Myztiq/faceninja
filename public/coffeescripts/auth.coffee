@@ -11,7 +11,8 @@ window.auth =
           success: ->
             cb?()
           error: (e)->
-            cb? e
+            console.log e
+            cb?()
       error: (e)->
         cb? e
 
@@ -38,10 +39,18 @@ window.auth =
       success: (tokens)->
         user = new Kinvey.User()
         user.loginWithTwitter tokens, {},
-          success: ->
-            console.log tokens
-            console.log user.getIdentity()
-            cb? true
+          success: ()->
+            console.log 'Logged in correctly!'
+            usr = Kinvey.getCurrentUser()
+            usr.set('name', 'Test')
+            usr.save
+              success: ->
+                console.log 'Success'
+                cb? true
+              error: (e)->
+                console.log 'Failed to save entry'
+                console.log e
+                cb? true
           error: (e)->
             console.log e
             alert('Unable to sign in.')

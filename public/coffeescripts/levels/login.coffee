@@ -27,8 +27,8 @@ Q.scene 'login', (stage)->
 #    fill: 'white'
 #  , ->
 #      window.auth.loginWithTwitter (loggedIn)->
-#      if loggedIn
-#        Q.clearStages()
-#        Q.stageScene('start')
-#      else
-#        alert('You must authorize this app in order to use it.')
+#        if loggedIn
+#          Q.clearStages()
+#          Q.stageScene('start')
+#        else
+#          alert('You must authorize this app in order to use it.')
