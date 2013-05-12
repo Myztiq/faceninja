@@ -66,6 +66,7 @@ Q.scene "gameOver", (stage) ->
     Q.stageScene('start')
 
   highestScore = usr.get('highestScore')
+  highestScore or= 0
   if highestScore > window.score.kills
     stage.insert new Q.UI.Text
       label: "Keep Trying. Personal best: #{highestScore}"
