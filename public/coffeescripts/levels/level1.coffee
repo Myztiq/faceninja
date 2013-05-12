@@ -105,7 +105,6 @@ Q.scene "level1", (stage) ->
       height = Q.el.height
 
       difficulty = Math.floor(count/20 + 4)
-      console.log 'count', count, 'speed', speed, 'difficulty', difficulty
 
       for i in [0..getRandomArbitary(1,difficulty)]
         timeout = 0
