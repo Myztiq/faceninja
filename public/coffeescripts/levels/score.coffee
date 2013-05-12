@@ -1,6 +1,7 @@
 window.score = {}
 
 Q.scene "score", (stage) ->
+  window.gameStartTime = new Date()
   window.score =
     kills: 0
     lives: 5

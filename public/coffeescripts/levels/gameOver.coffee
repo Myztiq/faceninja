@@ -65,6 +65,13 @@ Q.scene "gameOver", (stage) ->
   , ->
     Q.stageScene('start')
 
+  totalGameTime = usr.get('totalGameTime')
+  totalGameTime or= 0
+
+  totalGameTime += new Date() - window.gameStartTime
+
+  usr.set('totalGameTime', totalGameTime)
+
   highestScore = usr.get('highestScore')
   highestScore or= 0
   if highestScore > window.score.kills
@@ -73,7 +80,9 @@ Q.scene "gameOver", (stage) ->
       y: 150
       x: Q.width/2
     loadScores()
+    usr.save()
   else
+    usr.set('winningGameTime', new Date() - window.gameStartTime)
     usr.set('highestScore', window.score.kills)
     usr.save
       success: ->

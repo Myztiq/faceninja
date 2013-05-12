@@ -41,6 +41,7 @@ Q.scene "level1", (stage) ->
     speedY: 1.5
   )
   timer = 0
+  count = 0
   vibrating = false
   stage.add("viewport, tween")
 
@@ -89,18 +90,34 @@ Q.scene "level1", (stage) ->
     mousePositions = [mousePositions[mousePositions.length-1]]
 
     timer += dt
+
+    speed = 1.5
+    if count > 20
+      speed = 1
+
     if timer > 1.5
       timer = 0
+      count++
       offset = Q.el.width
       min = offset / 2 - (width / 2)
       max = offset / 2 + (width / 2)
 
       height = Q.el.height
-      for i in [0..getRandomArbitary(1,4)]
-        friend = _friends[Math.round(getRandomArbitary(0,_friends.length-1))]
-        stage.insert new Q.Enemy
-          asset: friend.url
-          friend: friend.id
-          x: getRandomArbitary(min,max)
-          y: height+20
+
+      difficulty = Math.floor(count/20 + 4)
+      console.log 'count', count, 'speed', speed, 'difficulty', difficulty
+
+      for i in [0..getRandomArbitary(1,difficulty)]
+        timeout = 0
+        if count > 10
+          timeout = getRandomArbitary(0,count*10)
+
+        setTimeout ->
+          friend = _friends[Math.round(getRandomArbitary(0,_friends.length-1))]
+          stage.insert new Q.Enemy
+            asset: friend.url
+            friend: friend.id
+            x: getRandomArbitary(min,max)
+            y: height+20
+        , timeout
 
