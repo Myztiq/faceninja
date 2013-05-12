@@ -6,7 +6,7 @@ getRandomArbitary = (min, max)->
 # Create a new scene called level 1
 _friends = null
 Q.scene "loadLevel1", (stage) ->
-  window.facebook.getFriends (friends)->
+  window.getFriends (friends)->
     _friends = null
     resources = []
     for friend in friends

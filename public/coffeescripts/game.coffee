@@ -29,8 +29,7 @@ document.addEventListener 'DOMContentLoaded', ->
     Q.setup({maximize: true}).controls().touch(Q.SPRITE_ALL)
 
     # Finally, call stageScene to run the game
-    window.facebook.isLoggedIn (loggedIn)->
-      if loggedIn
-        Q.stageScene "start"
-      else
-        Q.stageScene "login"
+    if Kinvey.getCurrentUser()?
+      Q.stageScene "start"
+    else
+      Q.stageScene "login"

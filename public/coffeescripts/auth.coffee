@@ -1,71 +1,56 @@
-holds = []
-isFbInit = false
-window.fbAsyncInit = ->
-  isFbInit = true
-  
-  # init the FB JS SDK
-  FB.init
-    appId: "168848406613915" # App ID from the app dashboard
-    channelUrl: "/channel.html" # Channel file for x-domain comms
-    status: true # Check Facebook Login status
-    xfbml: true # Look for social plugins on the page
+Kinvey.init({
+    'appKey': 'kid_TeG4DSfgkf',
+    'appSecret': '989e6e6da8984a8b84e2fb9257e206e4'
+});
 
-  #release holds
-  for hold in holds
-    hold()
+window.getFriends = (cb)->
+  myFriends = new Kinvey.Collection('friends')
+  myFriends.fetch
+    success: (friends)->
+      rtn = []
+      for friend in friends
+        rtn.push friend.toJSON(true)
 
-holdForFacebook = (method)->
-  if !isFbInit
-    holds.push method
-  else
-    method?()
+      cb rtn
+    error: (e)->
+      console.log e
+      alert('Could not load friends!')
 
+window.twitter =
+  login: (cb)->
+    Kinvey.OAuth.signIn 'twitter',
+      success: (tokens)->
+        user = new Kinvey.User()
+        user.loginWithTwitter tokens, {},
+          success: ->
+            console.log tokens
+            console.log user.getIdentity()
+            cb? true
+          error: (e)->
+            console.log e
+            alert('Unable to sign in.')
+            cb? false
+
+      error: (e)->
+        console.log e
+        alert("Unable to sign in.")
+        cb? false
 
 window.facebook =
-  isLoggedIn: (cb)->
-    holdForFacebook ()->
-      FB.getLoginStatus (response)->
-        if response.status == 'connected'
-          cb?(true)
-        else
-          cb?(false)
-
   login: (cb)->
-    holdForFacebook ()->
-      FB.login (response)->
-        if response.authResponse
-          cb? true
-        else
-          cb? false
+    Kinvey.OAuth.signIn 'facebook',
+      success: (tokens)->
+        user = new Kinvey.User()
+        user.loginWithFacebook tokens, {},
+          success: ->
+            console.log user.getIdentity()
+            cb? true
+          error: (e)->
+            console.log e
+            alert('Unable to sign in.')
+            cb? false
 
-  logout: (cb)->
-    holdForFacebook ()->
-      FB.logout ->
-        cb?()
-
-  getFriends: (cb)->
-    holdForFacebook ()->
-      FB.api "me/?fields=friends.fields(picture.type(large))&redirect=false", (response) ->
-        images = response
-        friends = []
-        for friend in images.friends.data
-          if friend.picture.data.url.indexOf('fbcdn.net') == -1
-            friends.push
-             id: friend.id
-             url: friend.picture.data.url
-
-        cb friends
-
-
-# Additional initialization code such as adding Event Listeners goes here
-
-# Load the SDK asynchronously
-((d, s, id) ->
-  js = undefined
-  fjs = d.getElementsByTagName(s)[0]
-  return  if d.getElementById(id)
-  js = d.createElement(s)
-  js.id = id
-  js.src = "//connect.facebook.net/en_US/all.js"
-  fjs.parentNode.insertBefore js, fjs
-) document, "script", "facebook-jssdk"
+      error: (e)->
+        console.log e
+        alert("Unable to sign in.")
+        cb? false
