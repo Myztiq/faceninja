@@ -33,9 +33,10 @@ Q.scene "gameOver", (stage) ->
       success: (users)->
         globalLeaderboard.p.label = 'Leaderboard'
 
+        counter = 1
         label = ""
         for user in users
-          label += "#{user.get('name')} - #{user.get('highestScore')}\n"
+          label += "###{counter}: #{user.get('name')} - #{user.get('highestScore')}\n"
 
         stage.insert new Q.UI.Text
             label: label
