@@ -28,12 +28,15 @@ Q.Sprite.extend "Enemy",
     if !@dead
       @dead = true
 
-#      rand = Math.round getRandomArbitary 1,5
-#      Q.audio.play("/audio/effects/mellow-explode/explode_#{rand}.mp3")
-#      Q.audio.play("/audio/effects/explode/explode_#{rand}.mp3")
+      usr = Kinvey.getCurrentUser()
+
+      if !usr.get('isMuted')
+        rand = Math.round getRandomArbitary 1,5
+        Q.audio.play("/audio/effects/mellow-explode/explode_#{rand}.mp3")
+#        Q.audio.play("/audio/effects/explode/explode_#{rand}.mp3")
 
       Q.stage().trigger 'vibrate'
-      window.score.kills++
+      Q.scene('score').killFriend(@)
       Q.explode(@)
 
   draw: (ctx)->
@@ -51,5 +54,5 @@ Q.Sprite.extend "Enemy",
       @animate({scale: @p.scale+.3, angle: 0}, 2)
 
     if @p.y > Q.el.height + 200
-      window.score.lives--
+      Q.scene('score').loseLife()
       @destroy()

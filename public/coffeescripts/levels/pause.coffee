@@ -19,15 +19,35 @@ Q.scene 'pause', (stage)->
 
   stage.insert new Q.UI.Button
     label: 'Resume Game'
-    y: 250
+    y: 200
     x: Q.width/2
     border: 2
     fill: 'white'
   , unpause
 
+  usr = Kinvey.getCurrentUser()
+
+  label = 'Mute'
+  if usr.get('isMuted')
+    label = 'Unmute'
+
+
+  stage.insert new Q.UI.Button
+    label: label
+    y: 250
+    x: Q.width/2
+    border: 2
+    fill: 'white'
+  , ->
+    window.muteSounds = !window.muteSounds
+    usr.set('isMuted', window.muteSounds)
+    usr.save()
+    Q.stageScene 'pause', 1
+
+
   stage.insert new Q.UI.Button
     label: 'Logout'
-    y: 350
+    y: 300
     x: Q.width/2
     border: 2
     fill: 'white'

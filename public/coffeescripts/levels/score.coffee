@@ -16,7 +16,13 @@ Q.scene "score", (stage) ->
     y: 20
     x: Q.width/2 - 100
 
-  stage.on 'step', ()->
+  @killFriend = (friend)=>
+    window.score.kills++
+
+  @loseLife = =>
+    window.score.lives--
+
+  stage.on 'step', ()=>
     kills.p.label = "Kills #{window.score.kills}"
 
     if window.score.lives < 0
