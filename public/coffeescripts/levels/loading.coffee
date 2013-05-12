@@ -9,3 +9,11 @@ Q.scene "loading", (stage) ->
     label: 'Loading....'
     y: 150
     x: Q.width/2
+    align: 'center'
+
+  stage.insert new Q.UI.Text
+    label: 'This may take a while because \nwe are loading every single \none of your friends pictures'
+    y: 200
+    x: Q.width/2
+    size: 15
+    align: 'center'

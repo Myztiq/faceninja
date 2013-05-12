@@ -6,6 +6,7 @@ getRandomArbitary = (min, max)->
 # Create a new scene called level 1
 _friends = null
 Q.scene "loadLevel1", (stage) ->
+  Q.stageScene 'loading'
   window.getFriends (friends)->
     _friends = null
     resources = []
@@ -14,7 +15,6 @@ Q.scene "loadLevel1", (stage) ->
 
 
     _friends = friends
-    Q.stageScene 'loading'
     Q.load resources, ()->
       Q.clearStages()
       Q.stageScene 'level1'
