@@ -1070,7 +1070,7 @@ var Quintus = function Quintus(opts) {
     }
 
     /* Lookup the asset in the assetTypes hash, or return other */
-    return fileType || 'Other';
+    return fileType || 'Image';
   };
 
   // Either return an absolute URL,
